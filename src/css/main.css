@@ -70,7 +70,7 @@
   }
 
   .btn {
-    @apply inline-flex items-center justify-center rounded-none border px-5 py-3 text-sm font-semibold transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-400 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-60;
+    @apply inline-flex items-center justify-center rounded-none px-5 py-3 text-sm font-semibold transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-400 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-60;
   }
 
   .btn-solid {
@@ -78,7 +78,7 @@
   }
 
   .btn-ghost {
-    @apply btn border-emerald-200 bg-white text-emerald-700 hover:-translate-y-0.5 hover:border-emerald-500 hover:bg-emerald-50 hover:text-emerald-900 active:translate-y-0;
+    @apply btn border border-emerald-200 rounded-[10px_0_10px_0] bg-white text-emerald-700 hover:-translate-y-0.5 hover:border-emerald-500 hover:bg-emerald-50 hover:text-emerald-900 active:translate-y-0;
   }
 
   .btn-glass {
@@ -86,7 +86,7 @@
   }
 
   .btn-glass-pill {
-    @apply inline-flex w-full items-center rounded-full border border-white/40 bg-white/20 p-1 pr-5 text-white backdrop-blur-md transition-all duration-200 hover:-translate-y-0.5 hover:border-white/60 hover:bg-white/30 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/70 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-60 sm:w-max;
+    @apply inline-flex w-full items-center rounded-full border border-white/40 bg-white/20 p-1 text-white backdrop-blur-md transition-all duration-200 hover:-translate-y-0.5 hover:border-white/60 hover:bg-white/30 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/70 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-60 sm:w-max;
   }
 
   .btn-glass-icon {
@@ -94,7 +94,7 @@
   }
 
   .btn-glass-text {
-    @apply w-full text-sm font-extrabold text-center text-white;
+    @apply w-full text-sm font-extrabold text-center text-white px-5;
   }
 
   .btn-primary {
