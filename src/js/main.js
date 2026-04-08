@@ -9,6 +9,8 @@ document.addEventListener('DOMContentLoaded', () => {
   const mobileMenu = document.getElementById('mobile-menu');
   const yearTargets = document.querySelectorAll('[data-year]');
   const hashLinks = document.querySelectorAll('a[href^="#"]');
+  const werkwijzeIcon = document.querySelector('[data-werkwijze-icon]');
+  const werkwijzeButton = werkwijzeIcon ? werkwijzeIcon.closest('.btn-glass-pill') : null;
   const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   const scrollBehavior = prefersReducedMotion ? 'auto' : 'smooth';
   const closeMobileMenu = () => {
@@ -82,4 +84,93 @@ document.addEventListener('DOMContentLoaded', () => {
       if (mobileMenu && link.closest('#mobile-menu')) closeMobileMenu();
     });
   });
+
+  if (werkwijzeIcon) {
+    let introAnimation = null;
+    let activePointerId = null;
+    let pointerStartX = 0;
+    let swipeDeltaX = 0;
+    let hasReachedSwipeEnd = false;
+    const maxSwipeDistance = 44;
+
+    const setIconTransform = (deltaX) => {
+      const clampedDeltaX = Math.max(0, Math.min(maxSwipeDistance, deltaX));
+      werkwijzeIcon.style.transform = `translateX(${clampedDeltaX}px)`;
+    };
+
+    const setPressedState = (isPressed) => {
+      if (!werkwijzeButton) return;
+      werkwijzeButton.classList.toggle('bg-white/30', isPressed);
+      werkwijzeButton.classList.toggle('border-white/60', isPressed);
+      werkwijzeButton.classList.toggle('translate-y-0', isPressed);
+    };
+
+    const resetSwipeState = () => {
+      setPressedState(false);
+      werkwijzeIcon.style.transition = 'transform 280ms ease';
+      setIconTransform(0);
+      window.setTimeout(() => {
+        werkwijzeIcon.style.transition = '';
+      }, 280);
+      swipeDeltaX = 0;
+      hasReachedSwipeEnd = false;
+      activePointerId = null;
+    };
+
+    werkwijzeIcon.style.touchAction = 'pan-y';
+
+    werkwijzeIcon.addEventListener('pointerdown', (event) => {
+      if (event.pointerType === 'mouse' && event.button !== 0) return;
+      if (introAnimation) {
+        introAnimation.cancel();
+        introAnimation = null;
+      }
+
+      activePointerId = event.pointerId;
+      pointerStartX = event.clientX;
+      swipeDeltaX = 0;
+      hasReachedSwipeEnd = false;
+      setPressedState(true);
+      werkwijzeIcon.style.transition = '';
+      werkwijzeIcon.setPointerCapture(event.pointerId);
+    });
+
+    werkwijzeIcon.addEventListener('pointermove', (event) => {
+      if (event.pointerId !== activePointerId) return;
+      event.preventDefault();
+      swipeDeltaX = Math.max(0, event.clientX - pointerStartX);
+      setIconTransform(swipeDeltaX);
+      hasReachedSwipeEnd = swipeDeltaX >= maxSwipeDistance;
+    });
+
+    werkwijzeIcon.addEventListener('pointerup', (event) => {
+      if (event.pointerId !== activePointerId) return;
+      if (hasReachedSwipeEnd && werkwijzeButton) {
+        werkwijzeButton.click();
+      }
+      resetSwipeState();
+    });
+
+    werkwijzeIcon.addEventListener('pointercancel', (event) => {
+      if (event.pointerId !== activePointerId) return;
+      resetSwipeState();
+    });
+
+    if (!prefersReducedMotion) {
+      window.setTimeout(() => {
+        introAnimation = werkwijzeIcon.animate(
+          [
+            { transform: 'translateX(0) rotate(0deg)' },
+            { transform: 'translateX(8px) rotate(180deg)' },
+            { transform: 'translateX(0) rotate(360deg)' }
+          ],
+          {
+            duration: 1800,
+            easing: 'ease-in-out',
+            iterations: 1
+          }
+        );
+      }, 1000);
+    }
+  }
 });
