@@ -7,15 +7,65 @@ document.addEventListener('DOMContentLoaded', () => {
   const menuCloseButtons = document.querySelectorAll('[data-menu-close]');
   const mobileSubmenuToggles = document.querySelectorAll('[data-mobile-submenu-toggle]');
   const mobileMenu = document.getElementById('mobile-menu');
+  const mobileMenuPanel = mobileMenu ? mobileMenu.querySelector('[data-mobile-menu-panel]') : null;
+  const mobileMenuItems = mobileMenu ? Array.from(mobileMenu.querySelectorAll('[data-mobile-menu-item]')) : [];
   const yearTargets = document.querySelectorAll('[data-year]');
   const hashLinks = document.querySelectorAll('a[href^="#"]');
   const werkwijzeIcon = document.querySelector('[data-werkwijze-icon]');
   const werkwijzeButton = werkwijzeIcon ? werkwijzeIcon.closest('.btn-glass-pill') : null;
   const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   const scrollBehavior = prefersReducedMotion ? 'auto' : 'smooth';
+  let mobileMenuAnimations = [];
+
+  const stopMobileMenuAnimations = () => {
+    mobileMenuAnimations.forEach((animation) => {
+      animation.cancel();
+    });
+    mobileMenuAnimations = [];
+  };
+
+  const animateMobileMenuEnter = () => {
+    if (!mobileMenu || prefersReducedMotion) return;
+
+    stopMobileMenuAnimations();
+
+    if (mobileMenuPanel) {
+      const panelAnimation = mobileMenuPanel.animate(
+        [
+          { opacity: 0, transform: 'translateY(52px) rotate(-1.4deg) scale(0.985)' },
+          { opacity: 1, transform: 'translateY(0px) rotate(0deg) scale(1)' }
+        ],
+        {
+          duration: 520,
+          easing: 'cubic-bezier(0.2, 0.85, 0.22, 1)',
+          fill: 'both'
+        }
+      );
+      mobileMenuAnimations.push(panelAnimation);
+    }
+
+    mobileMenuItems.forEach((item, index) => {
+      const itemAnimation = item.animate(
+        [
+          { opacity: 0, transform: 'translateY(36px)' },
+          { opacity: 1, transform: 'translateY(-4px)', offset: 0.72 },
+          { opacity: 1, transform: 'translateY(0px)' }
+        ],
+        {
+          duration: 560,
+          delay: 110 + index * 55,
+          easing: 'cubic-bezier(0.16, 1, 0.3, 1)',
+          fill: 'both'
+        }
+      );
+      mobileMenuAnimations.push(itemAnimation);
+    });
+  };
+
   const closeMobileMenu = () => {
     if (!mobileMenu) return;
     mobileMenu.classList.add('hidden');
+    stopMobileMenuAnimations();
     document.body.classList.remove('overflow-hidden');
     menuToggleButtons.forEach((toggleButton) => {
       toggleButton.setAttribute('aria-expanded', 'false');
@@ -27,8 +77,13 @@ document.addEventListener('DOMContentLoaded', () => {
       if (!mobileMenu) return;
 
       const isHidden = mobileMenu.classList.contains('hidden');
-      mobileMenu.classList.toggle('hidden', !isHidden);
-      document.body.classList.toggle('overflow-hidden', isHidden);
+      if (isHidden) {
+        mobileMenu.classList.remove('hidden');
+        document.body.classList.add('overflow-hidden');
+        animateMobileMenuEnter();
+      } else {
+        closeMobileMenu();
+      }
 
       menuToggleButtons.forEach((toggleButton) => {
         toggleButton.setAttribute('aria-expanded', String(isHidden));

@@ -66,10 +66,10 @@
 
         <div
           class="relative -mb-12 h-[calc((var(--vh-locked,1dvh)*90)+48px)] [--tw-skew-y:-3deg] [transform:translate(var(--tw-translate-x),var(--tw-translate-y))_rotate(var(--tw-rotate))_skewX(var(--tw-skew-x))_skewY(var(--tw-skew-y))_scaleX(var(--tw-scale-x))_scaleY(var(--tw-scale-y))]">
-          <div class="h-full overflow-hidden rounded-tl-[2rem] rounded-tr-[2.75rem] bg-white shadow-2xl">
+          <div class="h-full overflow-hidden rounded-tl-[2rem] rounded-tr-[2.75rem] bg-white shadow-2xl" data-mobile-menu-panel>
             <div
               class="h-full overflow-y-auto px-3 pb-8 pt-3 [--tw-skew-y:3deg] [transform:translate(var(--tw-translate-x),var(--tw-translate-y))_rotate(var(--tw-rotate))_skewX(var(--tw-skew-x))_skewY(var(--tw-skew-y))_scaleX(var(--tw-scale-x))_scaleY(var(--tw-scale-y))]">
-              <div class="mb-5 flex justify-end">
+              <div class="mb-5 flex justify-end" data-mobile-menu-item>
                 <button type="button"
                   class="inline-flex h-10 w-10 items-center justify-center rounded-full text-zinc-800 transition hover:bg-zinc-100"
                   data-menu-close aria-label="Menu sluiten">
@@ -81,7 +81,8 @@
               <nav class="flex flex-col gap-2">
                 <button type="button"
                   class="inline-flex items-center justify-between bg-emerald-100/50 px-4 py-2 text-xl font-medium text-black"
-                  data-mobile-submenu-toggle aria-expanded="true" aria-controls="mobile-startpagina-submenu">
+                  data-mobile-submenu-toggle data-mobile-menu-item aria-expanded="true"
+                  aria-controls="mobile-startpagina-submenu">
                   <span>Startpagina</span>
                   <svg class="h-5 w-5 rotate-180 transition-transform duration-200" data-mobile-submenu-icon viewBox="0 0 20 20"
                     fill="none" aria-hidden="true">
@@ -90,25 +91,29 @@
                   </svg>
                 </button>
                 <div id="mobile-startpagina-submenu" class="space-y-1 pl-2">
-                  <a href="#" class="inline-flex w-full items-center justify-between px-4 py-2 text-sm font-medium text-black hover:bg-zinc-100">
+                  <a href="#" class="inline-flex w-full items-center justify-between px-4 py-2 text-sm font-medium text-black hover:bg-zinc-100"
+                    data-mobile-menu-item>
                     Diensten
                     <svg class="h-4 w-4 shrink-0" viewBox="0 0 20 20" fill="none" aria-hidden="true">
                       <path d="M8 5L13 10L8 15" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
                     </svg>
                   </a>
-                  <a href="#" class="inline-flex w-full items-center justify-between px-4 py-2 text-sm font-medium text-black hover:bg-zinc-100">
+                  <a href="#" class="inline-flex w-full items-center justify-between px-4 py-2 text-sm font-medium text-black hover:bg-zinc-100"
+                    data-mobile-menu-item>
                     Over ons
                     <svg class="h-4 w-4 shrink-0" viewBox="0 0 20 20" fill="none" aria-hidden="true">
                       <path d="M8 5L13 10L8 15" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
                     </svg>
                   </a>
-                  <a href="#" class="inline-flex w-full items-center justify-between px-4 py-2 text-sm font-medium text-black hover:bg-zinc-100">
+                  <a href="#" class="inline-flex w-full items-center justify-between px-4 py-2 text-sm font-medium text-black hover:bg-zinc-100"
+                    data-mobile-menu-item>
                     Projecten
                     <svg class="h-4 w-4 shrink-0" viewBox="0 0 20 20" fill="none" aria-hidden="true">
                       <path d="M8 5L13 10L8 15" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
                     </svg>
                   </a>
-                  <a href="#" class="inline-flex w-full items-center justify-between px-4 py-2 text-sm font-medium text-black hover:bg-zinc-100">
+                  <a href="#" class="inline-flex w-full items-center justify-between px-4 py-2 text-sm font-medium text-black hover:bg-zinc-100"
+                    data-mobile-menu-item>
                     Contact
                     <svg class="h-4 w-4 shrink-0" viewBox="0 0 20 20" fill="none" aria-hidden="true">
                       <path d="M8 5L13 10L8 15" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
@@ -116,7 +121,7 @@
                   </a>
                 </div>
               </nav>
-              <article class="mt-5 overflow-hidden rounded-[10px] bg-emerald-100/50 p-2">
+              <article class="mt-5 overflow-hidden rounded-[10px] bg-emerald-100/50 p-2" data-mobile-menu-item>
                 <div class="relative h-40 overflow-hidden rounded-[3px]">
                   <img src="./assets/images/hero-bg.png" alt="Elektrische installatie in uitvoering"
                     class="h-full w-full object-cover" />
@@ -156,7 +161,7 @@
                       Snel onderhoud en uitgebreide installaties door heel Nederland
                     </p>
                   </div>
-                  <a href="#" class="btn-glass-pill sm:self-center sm:min-w-[250px]">
+                  <a href="#werkwijze" class="btn-glass-pill sm:self-center sm:min-w-[250px]">
                     <span class="btn-glass-icon cursor-grab active:cursor-grabbing" data-werkwijze-icon>
                       <svg class="h-7 w-7" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
                         <path d="M13 2L6 14h5l-1 8 7-12h-5l1-8z"></path>
@@ -447,7 +452,7 @@
         </div>
       </section>
 
-      <section class="border-b border-zinc-200 bg-white">
+      <section id="werkwijze" class="border-b border-zinc-200 bg-white">
         <div class="section-wrap section-space">
           <div class="max-w-2xl">
             <span class="eyebrow">Eenvoudig proces</span>
