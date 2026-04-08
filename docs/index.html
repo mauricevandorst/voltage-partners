@@ -141,11 +141,13 @@
     </div>
 
     <main>
-      <section class="border-b border-zinc-200 bg-white">
+      <section class="border-b border-zinc-200 bg-white" data-hero-section>
         <div class="section-wrap py-4">
           <div class="grid gap-8">
             <div class="space-y-6">
-              <div class="relative min-h-[calc(var(--vh-locked,1dvh)*80)] overflow-hidden rounded-3xl rounded-tr-none">
+              <div
+                class="relative min-h-[calc(var(--vh-locked,1dvh)*80)] overflow-hidden rounded-3xl rounded-tr-none"
+                data-hero-frame>
                 <img src="./assets/images/hero-bg.png" alt="" class="absolute inset-0 h-full w-full object-cover"
                   aria-hidden="true" />
                 <div class="absolute inset-0 bg-black/40" aria-hidden="true"></div>
@@ -155,13 +157,13 @@
                 <div
                   class="relative flex min-h-[calc(var(--vh-locked,1dvh)*80)] flex-col justify-between gap-6 px-6 py-8 sm:px-8 sm:py-10 sm:items-center sm:pt-24">
                   <div class="space-y-3 w-full max-w-3xl sm:text-center">
-                    <h1 class="block pr-[8%] title-xl font-display text-white">De #1 <span
+                    <h1 class="block pr-[8%] title-xl font-display text-white" data-hero-text-item>De #1 <span
                         class="inline text-emerald-300 font-extrabold">elektra partner</span> voor bedrijven.</h1>
-                    <p class="body-copy max-w-xl text-zinc-100 font-extrabold sm:mx-auto">
+                    <p class="body-copy max-w-xl text-zinc-100 font-extrabold sm:mx-auto" data-hero-text-item>
                       Snel onderhoud en uitgebreide installaties door heel Nederland
                     </p>
                   </div>
-                  <a href="#werkwijze" class="btn-glass-pill sm:self-center sm:min-w-[250px]">
+                  <a href="#werkwijze" class="btn-glass-pill sm:self-center sm:min-w-[250px]" data-hero-pill>
                     <span class="btn-glass-icon cursor-grab active:cursor-grabbing" data-werkwijze-icon>
                       <svg class="h-7 w-7" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
                         <path d="M13 2L6 14h5l-1 8 7-12h-5l1-8z"></path>
@@ -172,23 +174,23 @@
                 </div>
               </div>
 
-              <div class="flex flex-col gap-3 sm:flex-row">
+              <div class="flex flex-col gap-3 sm:flex-row" data-hero-cta-row>
                 <a href="#" class="btn-solid">Introgesprek aanvragen</a>
                 <a href="#" class="btn-ghost">Bekijk diensten</a>
               </div>
 
               <div class="grid gap-3 sm:grid-cols-3">
-                <div class="wire-card-soft">
+                <div class="wire-card-soft" data-hero-card>
                   <p class="text-[11px] uppercase tracking-[0.22em] text-emerald-600">Belangrijk resultaat</p>
                   <p class="mt-3 text-sm font-semibold text-zinc-900">Veilig en volgens norm</p>
                   <p class="mt-2 text-xs text-zinc-600">Conform NEN 1010 en NEN-EN-IEC 61439</p>
                 </div>
-                <div class="wire-card-soft">
+                <div class="wire-card-soft" data-hero-card>
                   <p class="text-[11px] uppercase tracking-[0.22em] text-emerald-600">Vertrouwenssignaal</p>
                   <p class="mt-3 text-sm font-semibold text-zinc-900">24/7 storingsdienst</p>
                   <p class="mt-2 text-xs text-zinc-600">Dag en nacht inzetbaar</p>
                 </div>
-                <div class="wire-card-soft">
+                <div class="wire-card-soft" data-hero-card>
                   <p class="text-[11px] uppercase tracking-[0.22em] text-emerald-600">Volgende stap</p>
                   <p class="mt-3 text-sm font-semibold text-zinc-900">Snelle intake</p>
                   <p class="mt-2 text-xs text-zinc-600">Direct contact met ons team</p>
@@ -196,7 +198,7 @@
               </div>
             </div>
 
-            <aside class="wire-card bg-cyan-50">
+            <aside class="wire-card bg-cyan-50" data-hero-aside>
               <div class="placeholder-media p-4">
                 <p class="text-[11px] uppercase tracking-[0.22em] text-emerald-600">Project in uitvoering</p>
                 <div class="mt-4 h-52 border border-emerald-200 bg-zinc-200"></div>
