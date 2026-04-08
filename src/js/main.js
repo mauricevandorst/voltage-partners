@@ -1,4 +1,8 @@
 document.addEventListener('DOMContentLoaded', () => {
+  const viewportHeight = window.visualViewport ? window.visualViewport.height : window.innerHeight;
+  const lockedViewportUnit = viewportHeight * 0.01;
+  document.documentElement.style.setProperty('--vh-locked', `${lockedViewportUnit}px`);
+
   const menuToggleButtons = document.querySelectorAll('[data-menu-toggle]');
   const menuCloseButtons = document.querySelectorAll('[data-menu-close]');
   const mobileSubmenuToggles = document.querySelectorAll('[data-mobile-submenu-toggle]');
