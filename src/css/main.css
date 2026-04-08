@@ -86,7 +86,7 @@
   }
 
   .btn-glass-pill {
-    @apply inline-flex w-full items-center rounded-full border border-white/40 bg-white/20 p-1 text-white backdrop-blur-md transition-[background-color,border-color,transform,box-shadow] duration-300 ease-out hover:-translate-y-0.5 hover:border-white/60 hover:bg-white/30 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/70 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-60 sm:w-max;
+    @apply inline-flex w-full items-center rounded-full border border-white/40 bg-white/20 p-1 text-white backdrop-blur-md transition-[background-color,border-color,transform,box-shadow] duration-300 ease-out hover:-translate-y-0.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/70 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-60 sm:w-max;
   }
 
   .btn-glass-icon {

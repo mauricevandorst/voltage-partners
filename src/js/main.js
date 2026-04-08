@@ -1,4 +1,8 @@
 document.addEventListener('DOMContentLoaded', () => {
+  if ('scrollRestoration' in window.history) {
+    window.history.scrollRestoration = 'manual';
+  }
+
   const viewportHeight = window.visualViewport ? window.visualViewport.height : window.innerHeight;
   const lockedViewportUnit = viewportHeight * 0.01;
   document.documentElement.style.setProperty('--vh-locked', `${lockedViewportUnit}px`);
@@ -51,6 +55,11 @@ document.addEventListener('DOMContentLoaded', () => {
       { opacity: 1, transform: 'translateY(-8px)', offset: 0.72 },
       { opacity: 1, transform: 'translateY(0px)' }
     ];
+    const playfulPillRiseFrames = [
+      { opacity: 0, transform: 'translateY(28px)' },
+      { opacity: 1, transform: 'translateY(-6px)', offset: 0.72 },
+      { opacity: 1, transform: 'translateY(0px)' }
+    ];
 
     if (heroFrame) {
       const frameAnimation = heroFrame.animate(
@@ -83,7 +92,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (heroPill) {
       const pillAnimation = heroPill.animate(
-        playfulRiseFrames,
+        playfulPillRiseFrames,
         {
           duration: 980,
           delay: 560,
@@ -151,6 +160,16 @@ document.addEventListener('DOMContentLoaded', () => {
       top: Math.max(0, targetTop),
       behavior: scrollBehavior
     });
+  };
+
+  const getHashTarget = (hash) => {
+    if (!hash || hash === '#') return null;
+
+    try {
+      return document.querySelector(hash);
+    } catch (error) {
+      return null;
+    }
   };
 
   const animateMobileMenuEnter = () => {
@@ -260,8 +279,12 @@ document.addEventListener('DOMContentLoaded', () => {
         return;
       }
 
-      const target = document.querySelector(href);
+      const target = getHashTarget(href);
       if (!target) return;
+
+      if (window.location.hash !== href) {
+        window.history.pushState(null, '', href);
+      }
 
       if (mobileMenu && link.closest('#mobile-menu')) {
         closeMobileMenu();
@@ -274,6 +297,13 @@ document.addEventListener('DOMContentLoaded', () => {
       scrollToAnchorTarget(target);
     });
   });
+
+  const initialTarget = getHashTarget(window.location.hash);
+  if (initialTarget) {
+    window.requestAnimationFrame(() => {
+      scrollToAnchorTarget(initialTarget);
+    });
+  }
 
   if (heroSection && !prefersReducedMotion) {
     if ('IntersectionObserver' in window) {
@@ -295,60 +325,118 @@ document.addEventListener('DOMContentLoaded', () => {
 
   if (werkwijzeIcon) {
     let introAnimation = null;
+    let introAnimationTimeoutId = null;
     let activePointerId = null;
     let pointerStartX = 0;
-    let swipeDeltaX = 0;
+    let swipeProgress = 0;
+    let hoverOffsetX = 0;
+    let hoverRotationDeg = 0;
+    let isHoveringButton = false;
     let hasReachedSwipeEnd = false;
     const maxSwipeDistance = 44;
+    const hoverDistance = 6;
+    const hoverPreviewRotationDeg = 18;
+    const canUseHover = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
+    const baseBackgroundAlpha = 0.2;
+    const activeBackgroundAlpha = 0.34;
+    const baseBorderAlpha = 0.4;
+    const activeBorderAlpha = 0.68;
 
-    const setIconTransform = (deltaX) => {
-      const clampedDeltaX = Math.max(0, Math.min(maxSwipeDistance, deltaX));
-      werkwijzeIcon.style.transform = `translateX(${clampedDeltaX}px)`;
+    const syncHoverOffset = () => {
+      const hasHoverPreview = canUseHover && isHoveringButton && activePointerId === null;
+      hoverOffsetX = hasHoverPreview ? hoverDistance : 0;
+      hoverRotationDeg = hasHoverPreview ? hoverPreviewRotationDeg : 0;
+    };
+
+    const updateSwipeVisualState = () => {
+      const swipeOffsetX = swipeProgress * maxSwipeDistance;
+      const totalOffsetX = swipeOffsetX + hoverOffsetX;
+      const rotateDeg = swipeProgress * 360 + hoverRotationDeg;
+      werkwijzeIcon.style.transform = `translateX(${totalOffsetX}px) rotate(${rotateDeg}deg)`;
+
+      if (!werkwijzeButton) return;
+      const backgroundAlpha = baseBackgroundAlpha + (activeBackgroundAlpha - baseBackgroundAlpha) * swipeProgress;
+      const borderAlpha = baseBorderAlpha + (activeBorderAlpha - baseBorderAlpha) * swipeProgress;
+      werkwijzeButton.style.backgroundColor = `rgb(255 255 255 / ${backgroundAlpha.toFixed(3)})`;
+      werkwijzeButton.style.borderColor = `rgb(255 255 255 / ${borderAlpha.toFixed(3)})`;
     };
 
     const setPressedState = (isPressed) => {
       if (!werkwijzeButton) return;
-      werkwijzeButton.classList.toggle('bg-white/30', isPressed);
-      werkwijzeButton.classList.toggle('border-white/60', isPressed);
       werkwijzeButton.classList.toggle('translate-y-0', isPressed);
     };
 
     const resetSwipeState = () => {
       setPressedState(false);
       werkwijzeIcon.style.transition = 'transform 280ms ease';
-      setIconTransform(0);
+      if (werkwijzeButton) {
+        werkwijzeButton.style.transition = 'background-color 280ms ease, border-color 280ms ease';
+      }
+      syncHoverOffset();
+      swipeProgress = 0;
+      updateSwipeVisualState();
       window.setTimeout(() => {
         werkwijzeIcon.style.transition = '';
+        if (werkwijzeButton) {
+          werkwijzeButton.style.transition = '';
+        }
       }, 280);
-      swipeDeltaX = 0;
       hasReachedSwipeEnd = false;
       activePointerId = null;
     };
 
     werkwijzeIcon.style.touchAction = 'pan-y';
+    werkwijzeIcon.setAttribute('draggable', 'false');
+    if (werkwijzeButton) {
+      werkwijzeButton.setAttribute('draggable', 'false');
+    }
+
+    const cancelIntroAnimation = () => {
+      if (introAnimationTimeoutId !== null) {
+        window.clearTimeout(introAnimationTimeoutId);
+        introAnimationTimeoutId = null;
+      }
+      if (!introAnimation) return;
+      introAnimation.cancel();
+      introAnimation = null;
+    };
+
+    werkwijzeIcon.addEventListener('dragstart', (event) => {
+      event.preventDefault();
+    });
+    if (werkwijzeButton) {
+      werkwijzeButton.addEventListener('dragstart', (event) => {
+        event.preventDefault();
+      });
+    }
 
     werkwijzeIcon.addEventListener('pointerdown', (event) => {
       if (event.pointerType === 'mouse' && event.button !== 0) return;
-      if (introAnimation) {
-        introAnimation.cancel();
-        introAnimation = null;
-      }
+      event.preventDefault();
+      cancelIntroAnimation();
 
       activePointerId = event.pointerId;
       pointerStartX = event.clientX;
-      swipeDeltaX = 0;
+      swipeProgress = 0;
       hasReachedSwipeEnd = false;
       setPressedState(true);
+      isHoveringButton = false;
+      syncHoverOffset();
       werkwijzeIcon.style.transition = '';
+      if (werkwijzeButton) {
+        werkwijzeButton.style.transition = '';
+      }
+      updateSwipeVisualState();
       werkwijzeIcon.setPointerCapture(event.pointerId);
     });
 
     werkwijzeIcon.addEventListener('pointermove', (event) => {
       if (event.pointerId !== activePointerId) return;
       event.preventDefault();
-      swipeDeltaX = Math.max(0, event.clientX - pointerStartX);
-      setIconTransform(swipeDeltaX);
-      hasReachedSwipeEnd = swipeDeltaX >= maxSwipeDistance;
+      const swipeDeltaX = Math.max(0, event.clientX - pointerStartX);
+      swipeProgress = Math.min(1, swipeDeltaX / maxSwipeDistance);
+      updateSwipeVisualState();
+      hasReachedSwipeEnd = swipeProgress >= 1;
     });
 
     werkwijzeIcon.addEventListener('pointerup', (event) => {
@@ -364,20 +452,97 @@ document.addEventListener('DOMContentLoaded', () => {
       resetSwipeState();
     });
 
+    if (werkwijzeButton && canUseHover) {
+      werkwijzeButton.addEventListener('mouseenter', () => {
+        if (activePointerId !== null) return;
+        cancelIntroAnimation();
+        isHoveringButton = true;
+        syncHoverOffset();
+        werkwijzeIcon.style.transition = 'transform 220ms ease';
+        updateSwipeVisualState();
+      });
+
+      werkwijzeButton.addEventListener('mouseleave', () => {
+        if (activePointerId !== null) return;
+        isHoveringButton = false;
+        syncHoverOffset();
+        werkwijzeIcon.style.transition = 'transform 220ms ease';
+        updateSwipeVisualState();
+      });
+
+      window.addEventListener('blur', () => {
+        if (activePointerId !== null) return;
+        isHoveringButton = false;
+        syncHoverOffset();
+        updateSwipeVisualState();
+      });
+    }
+
+    updateSwipeVisualState();
+
     if (!prefersReducedMotion) {
-      window.setTimeout(() => {
-        introAnimation = werkwijzeIcon.animate(
-          [
-            { transform: 'translateX(0) rotate(0deg)' },
-            { transform: 'translateX(8px) rotate(180deg)' },
-            { transform: 'translateX(0) rotate(360deg)' }
-          ],
-          {
-            duration: 1800,
-            easing: 'ease-in-out',
-            iterations: 1
+      introAnimationTimeoutId = window.setTimeout(() => {
+        introAnimationTimeoutId = null;
+        if (activePointerId !== null) return;
+
+        const animationDuration = 1800;
+        const introPeakSwipeProgress = 0.33;
+        const easeInOut = (value) => 0.5 - Math.cos(value * Math.PI) * 0.5;
+        const easeOutBack = (value) => {
+          const overshoot = 1.70158;
+          const shifted = value - 1;
+          return 1 + (overshoot + 1) * shifted * shifted * shifted + overshoot * shifted * shifted;
+        };
+        const lerp = (start, end, amount) => start + (end - start) * amount;
+        let introFrameId = null;
+        const animationStartTime = performance.now();
+
+        const finishIntroAnimation = () => {
+          swipeProgress = 0;
+          updateSwipeVisualState();
+          introAnimation = null;
+        };
+
+        const runIntroFrame = (timestamp) => {
+          const elapsed = timestamp - animationStartTime;
+          const rawProgress = Math.min(1, elapsed / animationDuration);
+          let introProgress = 0;
+
+          if (rawProgress < 0.24) {
+            const phaseProgress = rawProgress / 0.24;
+            introProgress = lerp(0, 0.08, easeInOut(phaseProgress));
+          } else if (rawProgress < 0.62) {
+            const phaseProgress = (rawProgress - 0.24) / 0.38;
+            introProgress = lerp(0.08, 1, easeOutBack(phaseProgress));
+          } else {
+            const phaseProgress = (rawProgress - 0.62) / 0.38;
+            const settleProgress = 1 - easeInOut(phaseProgress);
+            const wobble = Math.sin(phaseProgress * Math.PI * 3) * 0.06 * (1 - phaseProgress);
+            introProgress = settleProgress + wobble;
           }
-        );
+
+          const clampedIntroProgress = Math.max(0, Math.min(1, introProgress));
+          swipeProgress = clampedIntroProgress * introPeakSwipeProgress;
+          updateSwipeVisualState();
+
+          if (rawProgress >= 1 || activePointerId !== null) {
+            finishIntroAnimation();
+            return;
+          }
+
+          introFrameId = window.requestAnimationFrame(runIntroFrame);
+        };
+
+        introAnimation = {
+          cancel: () => {
+            if (introFrameId !== null) {
+              window.cancelAnimationFrame(introFrameId);
+            }
+            finishIntroAnimation();
+          }
+        };
+
+        introFrameId = window.requestAnimationFrame(runIntroFrame);
       }, 1000);
     }
   }
