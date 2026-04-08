@@ -1243,16 +1243,16 @@ body {
   right: -4rem;
 }
 
-.-right-\[20px\] {
-  right: -20px;
+.-right-\[15px\] {
+  right: -15px;
 }
 
 .-top-16 {
   top: -4rem;
 }
 
-.-top-\[16px\] {
-  top: -16px;
+.-top-\[12px\] {
+  top: -12px;
 }
 
 .left-1\/3 {
@@ -1261,14 +1261,6 @@ body {
 
 .top-0 {
   top: 0px;
-}
-
-.-right-\[15px\] {
-  right: -15px;
-}
-
-.-top-\[12px\] {
-  top: -12px;
 }
 
 .z-30 {
@@ -1441,16 +1433,16 @@ body {
   height: 1em;
 }
 
+.h-\[6rem\] {
+  height: 6rem;
+}
+
 .h-\[calc\(90vh\+48px\)\] {
   height: calc(90vh + 48px);
 }
 
 .h-full {
   height: 100%;
-}
-
-.h-\[6rem\] {
-  height: 6rem;
 }
 
 .min-h-\[340px\] {
@@ -1505,10 +1497,6 @@ body {
   width: 75%;
 }
 
-.w-32 {
-  width: 8rem;
-}
-
 .w-4 {
   width: 1rem;
 }
@@ -1557,12 +1545,12 @@ body {
   width: 35%;
 }
 
-.w-full {
-  width: 100%;
-}
-
 .w-\[6rem\] {
   width: 6rem;
+}
+
+.w-full {
+  width: 100%;
 }
 
 .max-w-2xl {
@@ -2672,10 +2660,6 @@ body {
   background-color: rgb(255 255 255 / var(--tw-bg-opacity, 1));
 }
 
-.hover\:bg-white\/10:hover {
-  background-color: rgb(255 255 255 / 0.1);
-}
-
 .hover\:bg-zinc-100:hover {
   --tw-bg-opacity: 1;
   background-color: rgb(244 244 245 / var(--tw-bg-opacity, 1));
@@ -2817,21 +2801,12 @@ body {
 }
 
 @media (min-width: 768px) {
-  .md\:mx-auto {
-    margin-left: auto;
-    margin-right: auto;
-  }
-
   .md\:flex {
     display: flex;
   }
 
   .md\:hidden {
     display: none;
-  }
-
-  .md\:min-w-\[250px\] {
-    min-width: 250px;
   }
 
   .md\:grid-cols-2 {
@@ -2844,22 +2819,6 @@ body {
 
   .md\:grid-cols-4 {
     grid-template-columns: repeat(4, minmax(0, 1fr));
-  }
-
-  .md\:items-center {
-    align-items: center;
-  }
-
-  .md\:self-center {
-    align-self: center;
-  }
-
-  .md\:pt-24 {
-    padding-top: 6rem;
-  }
-
-  .md\:text-center {
-    text-align: center;
   }
 }
 
