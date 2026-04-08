@@ -13,7 +13,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const heroFrame = heroSection ? heroSection.querySelector('[data-hero-frame]') : null;
   const heroTextItems = heroSection ? Array.from(heroSection.querySelectorAll('[data-hero-text-item]')) : [];
   const heroPill = heroSection ? heroSection.querySelector('[data-hero-pill]') : null;
-  const heroCtaRow = heroSection ? heroSection.querySelector('[data-hero-cta-row]') : null;
+  const heroCtaButtons = heroSection ? Array.from(heroSection.querySelectorAll('[data-hero-cta]')) : [];
   const heroCards = heroSection ? Array.from(heroSection.querySelectorAll('[data-hero-card]')) : [];
   const heroAside = heroSection ? heroSection.querySelector('[data-hero-aside]') : null;
   const yearTargets = document.querySelectorAll('[data-year]');
@@ -46,16 +46,22 @@ document.addEventListener('DOMContentLoaded', () => {
 
     stopHeroAnimations();
 
+    const playfulRiseFrames = [
+      { opacity: 0, transform: 'translateY(52px)' },
+      { opacity: 1, transform: 'translateY(-8px)', offset: 0.72 },
+      { opacity: 1, transform: 'translateY(0px)' }
+    ];
+
     if (heroFrame) {
       const frameAnimation = heroFrame.animate(
         [
-          { opacity: 0, transform: 'translateY(40px) scale(0.98) rotate(-0.8deg)' },
-          { opacity: 1, transform: 'translateY(-6px) scale(1.005) rotate(0.2deg)', offset: 0.7 },
+          { opacity: 0, transform: 'translateY(56px) scale(0.985)' },
+          { opacity: 1, transform: 'translateY(-8px) scale(1.006)', offset: 0.74 },
           { opacity: 1, transform: 'translateY(0px) scale(1) rotate(0deg)' }
         ],
         {
-          duration: 760,
-          easing: 'cubic-bezier(0.2, 0.85, 0.22, 1)',
+          duration: 980,
+          easing: 'cubic-bezier(0.16, 1, 0.3, 1)',
           fill: 'both'
         }
       );
@@ -64,14 +70,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
     heroTextItems.forEach((item, index) => {
       const textAnimation = item.animate(
-        [
-          { opacity: 0, transform: 'translateY(34px)' },
-          { opacity: 1, transform: 'translateY(-3px)', offset: 0.7 },
-          { opacity: 1, transform: 'translateY(0px)' }
-        ],
+        playfulRiseFrames,
         {
-          duration: 620,
-          delay: 150 + index * 120,
+          duration: 940,
+          delay: 220 + index * 170,
           easing: 'cubic-bezier(0.16, 1, 0.3, 1)',
           fill: 'both'
         }
@@ -81,14 +83,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (heroPill) {
       const pillAnimation = heroPill.animate(
-        [
-          { opacity: 0, transform: 'translateY(30px) rotate(-1.4deg) scale(0.97)' },
-          { opacity: 1, transform: 'translateY(-2px) rotate(0.5deg) scale(1.01)', offset: 0.76 },
-          { opacity: 1, transform: 'translateY(0px) rotate(0deg) scale(1)' }
-        ],
+        playfulRiseFrames,
         {
-          duration: 700,
-          delay: 360,
+          duration: 980,
+          delay: 560,
           easing: 'cubic-bezier(0.16, 1, 0.3, 1)',
           fill: 'both'
         }
@@ -96,34 +94,25 @@ document.addEventListener('DOMContentLoaded', () => {
       heroAnimations.push(pillAnimation);
     }
 
-    if (heroCtaRow) {
-      const ctaAnimation = heroCtaRow.animate(
-        [
-          { opacity: 0, transform: 'translateY(28px)' },
-          { opacity: 1, transform: 'translateY(-2px)', offset: 0.72 },
-          { opacity: 1, transform: 'translateY(0px)' }
-        ],
+    heroCtaButtons.forEach((button, index) => {
+      const ctaAnimation = button.animate(
+        playfulRiseFrames,
         {
-          duration: 620,
-          delay: 420,
+          duration: 920,
+          delay: 760 + index * 130,
           easing: 'cubic-bezier(0.16, 1, 0.3, 1)',
           fill: 'both'
         }
       );
       heroAnimations.push(ctaAnimation);
-    }
+    });
 
     heroCards.forEach((card, index) => {
-      const startRotation = -1.2 + index * 0.5;
       const cardAnimation = card.animate(
-        [
-          { opacity: 0, transform: `translateY(28px) rotate(${startRotation}deg)` },
-          { opacity: 1, transform: 'translateY(-2px) rotate(0.2deg)', offset: 0.76 },
-          { opacity: 1, transform: 'translateY(0px) rotate(0deg)' }
-        ],
+        playfulRiseFrames,
         {
-          duration: 620,
-          delay: 520 + index * 90,
+          duration: 980,
+          delay: 980 + index * 130,
           easing: 'cubic-bezier(0.16, 1, 0.3, 1)',
           fill: 'both'
         }
@@ -133,15 +122,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (heroAside) {
       const asideAnimation = heroAside.animate(
-        [
-          { opacity: 0, transform: 'translateX(44px) translateY(14px) rotate(1deg) scale(0.985)' },
-          { opacity: 1, transform: 'translateX(-6px) translateY(-2px) rotate(-0.2deg) scale(1.004)', offset: 0.74 },
-          { opacity: 1, transform: 'translateX(0px) translateY(0px) rotate(0deg) scale(1)' }
-        ],
+        playfulRiseFrames,
         {
-          duration: 780,
-          delay: 300,
-          easing: 'cubic-bezier(0.2, 0.85, 0.22, 1)',
+          duration: 1040,
+          delay: 700,
+          easing: 'cubic-bezier(0.16, 1, 0.3, 1)',
           fill: 'both'
         }
       );
