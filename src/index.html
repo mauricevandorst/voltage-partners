@@ -14,16 +14,17 @@
 
 <body>
   <div class="min-h-screen">
-    <header class="sticky top-0 z-50 bg-white/95 backdrop-blur">
+    <header class="sticky top-0 z-50 bg-white/95 backdrop-blur" data-navbar>
       <div class="section-wrap">
         <div class="flex items-center justify-between py-3">
-          <a href="#" class="flex items-center gap-3">
+          <a href="#" class="flex items-center gap-3" data-navbar-item>
             <div>
               <p class="font-brand text-3xl text-zinc-900">Voltage Partners</p>
             </div>
           </a>
 
           <button type="button" class="w-10 h-10 inline-flex items-center px-1 text-sm font-medium md:hidden"
+            data-navbar-item
             data-menu-toggle aria-expanded="false" aria-controls="mobile-menu" aria-label="Menu openen of sluiten">
             <span class="sr-only">Menu openen of sluiten</span>
             <svg class="h-full w-full text-zinc-900" viewBox="0 0 24 24" fill="none" aria-hidden="true">
@@ -32,12 +33,12 @@
           </button>
 
           <nav class="hidden items-center gap-1 md:flex">
-            <a href="#" class="nav-link-active">Home</a>
-            <a href="#" class="nav-link">Diensten</a>
-            <a href="#" class="nav-link">Over ons</a>
-            <a href="#" class="nav-link">Projecten</a>
-            <a href="#" class="nav-link">Contact</a>
-            <a href="#" class="btn-solid ml-2 px-4 py-2.5">Contact aanvragen</a>
+            <a href="#" class="nav-link-active" data-navbar-item>Home</a>
+            <a href="#" class="nav-link" data-navbar-item>Diensten</a>
+            <a href="#" class="nav-link" data-navbar-item>Over ons</a>
+            <a href="#" class="nav-link" data-navbar-item>Projecten</a>
+            <a href="#" class="nav-link" data-navbar-item>Contact</a>
+            <a href="#" class="btn-solid ml-2 px-4 py-2.5" data-navbar-item>Contact aanvragen</a>
           </nav>
         </div>
 
@@ -45,7 +46,7 @@
     </header>
 
     <div id="mobile-menu" class="fixed inset-0 z-[70] hidden md:hidden">
-      <div class="absolute inset-0 bg-slate-900"></div>
+      <div class="absolute inset-0 bg-slate-900" data-mobile-menu-backdrop></div>
 
       <div class="relative flex h-full flex-col">
         <div class="px-4 py-2 flex items-center justify-center gap-4 text-[13px]">
@@ -359,7 +360,7 @@
             <div class="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
               <div>
                 <p class="text-[11px] uppercase tracking-[0.24em] text-emerald-600">CTA-blok</p>
-                <h3 class="mt-2 text-2xl font-semibold text-zinc-950">Als het aanbod duidelijk is, haak dan in op het
+                <h3 class="mt-2 text-2xl font-semibold text-zinc-950">Als het aanbod duidelijk is, haakt dit blok in op het
                   gesprek.</h3>
               </div>
               <a href="#" class="btn-solid">Aanvraag starten</a>
@@ -542,14 +543,59 @@
     </main>
 
     <footer class="border-t border-zinc-200 bg-white">
-      <div
-        class="section-wrap flex flex-col gap-4 py-8 text-sm text-zinc-600 lg:flex-row lg:items-center lg:justify-between">
-        <p><span data-year></span> Voltage Partners B.V.</p>
-        <div class="flex flex-wrap gap-3">
-          <a href="#" class="hover:text-emerald-800">Diensten</a>
-          <a href="#" class="hover:text-emerald-800">Over ons</a>
-          <a href="#" class="hover:text-emerald-800">Projecten</a>
-          <a href="#" class="hover:text-emerald-800">Contact</a>
+      <div class="section-wrap py-10">
+        <div class="grid gap-8 border-b border-zinc-200 pb-8 md:grid-cols-2 xl:grid-cols-4">
+          <div class="space-y-4">
+            <p class="font-brand text-2xl text-zinc-900">Voltage Partners</p>
+            <p class="max-w-xs text-sm leading-6 text-zinc-600">
+              Betrouwbare elektrotechniek voor woningbouw, utiliteit en onderhoud door heel Nederland.
+            </p>
+            <a href="#" class="btn-solid inline-flex px-4 py-2.5 text-sm">Plan intake</a>
+          </div>
+
+          <div class="space-y-3 text-sm text-zinc-600">
+            <p class="text-[11px] uppercase tracking-[0.22em] text-emerald-700">Snel navigeren</p>
+            <div class="grid gap-2">
+              <a href="#" class="hover:text-emerald-800">Home</a>
+              <a href="#" class="hover:text-emerald-800">Diensten</a>
+              <a href="#" class="hover:text-emerald-800">Over ons</a>
+              <a href="#" class="hover:text-emerald-800">Projecten</a>
+              <a href="#" class="hover:text-emerald-800">Contact</a>
+            </div>
+          </div>
+
+          <div class="space-y-3 text-sm text-zinc-600">
+            <p class="text-[11px] uppercase tracking-[0.22em] text-emerald-700">Diensten</p>
+            <div class="grid gap-2">
+              <a href="#" class="hover:text-emerald-800">Utiliteitsbouw</a>
+              <a href="#" class="hover:text-emerald-800">Woningbouw</a>
+              <a href="#" class="hover:text-emerald-800">Storingsdienst</a>
+              <a href="#" class="hover:text-emerald-800">Groepenkasten</a>
+            </div>
+          </div>
+
+          <div class="space-y-3 text-sm text-zinc-600">
+            <p class="text-[11px] uppercase tracking-[0.22em] text-emerald-700">Contact</p>
+            <div class="grid gap-2">
+              <a href="tel:+31000000000" class="hover:text-emerald-800">+31 (0)00 000 0000</a>
+              <a href="mailto:info@voltagepartners.nl" class="hover:text-emerald-800">info@voltagepartners.nl</a>
+              <p>Werkgebied: heel Nederland</p>
+            </div>
+            <div class="grid grid-cols-3 gap-2 pt-2">
+              <div class="h-10 border border-zinc-200 bg-zinc-100"></div>
+              <div class="h-10 border border-zinc-200 bg-zinc-100"></div>
+              <div class="h-10 border border-zinc-200 bg-zinc-100"></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="flex flex-col gap-3 pt-5 text-xs text-zinc-500 md:flex-row md:items-center md:justify-between">
+          <p><span data-year></span> Voltage Partners B.V. Alle rechten voorbehouden.</p>
+          <div class="flex flex-wrap gap-3">
+            <a href="#" class="hover:text-emerald-800">Privacy</a>
+            <a href="#" class="hover:text-emerald-800">Cookiebeleid</a>
+            <a href="#" class="hover:text-emerald-800">Algemene voorwaarden</a>
+          </div>
         </div>
       </div>
     </footer>

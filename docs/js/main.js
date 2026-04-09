@@ -11,8 +11,11 @@ document.addEventListener('DOMContentLoaded', () => {
   const menuCloseButtons = document.querySelectorAll('[data-menu-close]');
   const mobileSubmenuToggles = document.querySelectorAll('[data-mobile-submenu-toggle]');
   const mobileMenu = document.getElementById('mobile-menu');
+  const mobileMenuBackdrop = mobileMenu ? mobileMenu.querySelector('[data-mobile-menu-backdrop]') : null;
   const mobileMenuPanel = mobileMenu ? mobileMenu.querySelector('[data-mobile-menu-panel]') : null;
   const mobileMenuItems = mobileMenu ? Array.from(mobileMenu.querySelectorAll('[data-mobile-menu-item]')) : [];
+  const navbar = document.querySelector('[data-navbar]');
+  const navbarItems = navbar ? Array.from(navbar.querySelectorAll('[data-navbar-item]')) : [];
   const heroSection = document.querySelector('[data-hero-section]');
   const heroFrame = heroSection ? heroSection.querySelector('[data-hero-frame]') : null;
   const heroTextItems = heroSection ? Array.from(heroSection.querySelectorAll('[data-hero-text-item]')) : [];
@@ -28,8 +31,10 @@ document.addEventListener('DOMContentLoaded', () => {
   const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   const scrollBehavior = prefersReducedMotion ? 'auto' : 'smooth';
   let mobileMenuAnimations = [];
+  let navbarAnimations = [];
   let heroAnimations = [];
   let hasHeroAnimated = false;
+  let isMobileMenuClosing = false;
 
   const stopMobileMenuAnimations = () => {
     mobileMenuAnimations.forEach((animation) => {
@@ -38,11 +43,54 @@ document.addEventListener('DOMContentLoaded', () => {
     mobileMenuAnimations = [];
   };
 
+  const stopNavbarAnimations = () => {
+    navbarAnimations.forEach((animation) => {
+      animation.cancel();
+    });
+    navbarAnimations = [];
+  };
+
   const stopHeroAnimations = () => {
     heroAnimations.forEach((animation) => {
       animation.cancel();
     });
     heroAnimations = [];
+  };
+
+  const animateNavbarEnter = () => {
+    if (!navbar || prefersReducedMotion) return;
+
+    stopNavbarAnimations();
+
+    const headerAnimation = navbar.animate(
+      [
+        { opacity: 0, transform: 'translateY(-22px)' },
+        { opacity: 1, transform: 'translateY(0px)' }
+      ],
+      {
+        duration: 560,
+        easing: 'cubic-bezier(0.16, 1, 0.3, 1)',
+        fill: 'both'
+      }
+    );
+    navbarAnimations.push(headerAnimation);
+
+    navbarItems.forEach((item, index) => {
+      const itemAnimation = item.animate(
+        [
+          { opacity: 0, transform: 'translateY(-18px)' },
+          { opacity: 1, transform: 'translateY(3px)', offset: 0.72 },
+          { opacity: 1, transform: 'translateY(0px)' }
+        ],
+        {
+          duration: 520,
+          delay: 120 + index * 46,
+          easing: 'cubic-bezier(0.16, 1, 0.3, 1)',
+          fill: 'both'
+        }
+      );
+      navbarAnimations.push(itemAnimation);
+    });
   };
 
   const animateHeroEnter = () => {
@@ -64,9 +112,9 @@ document.addEventListener('DOMContentLoaded', () => {
     if (heroFrame) {
       const frameAnimation = heroFrame.animate(
         [
-          { opacity: 0, transform: 'translateY(56px) scale(0.985)' },
-          { opacity: 1, transform: 'translateY(-8px) scale(1.006)', offset: 0.74 },
-          { opacity: 1, transform: 'translateY(0px) scale(1) rotate(0deg)' }
+          { opacity: 0 },
+          { opacity: 1, offset: 0.74 },
+          { opacity: 1 }
         ],
         {
           duration: 980,
@@ -177,6 +225,21 @@ document.addEventListener('DOMContentLoaded', () => {
 
     stopMobileMenuAnimations();
 
+    if (mobileMenuBackdrop) {
+      const backdropAnimation = mobileMenuBackdrop.animate(
+        [
+          { opacity: 0 },
+          { opacity: 1 }
+        ],
+        {
+          duration: 380,
+          easing: 'cubic-bezier(0.22, 1, 0.36, 1)',
+          fill: 'both'
+        }
+      );
+      mobileMenuAnimations.push(backdropAnimation);
+    }
+
     if (mobileMenuPanel) {
       const panelAnimation = mobileMenuPanel.animate(
         [
@@ -210,14 +273,100 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   };
 
-  const closeMobileMenu = () => {
-    if (!mobileMenu) return;
-    mobileMenu.classList.add('hidden');
-    stopMobileMenuAnimations();
-    document.body.classList.remove('overflow-hidden');
-    menuToggleButtons.forEach((toggleButton) => {
-      toggleButton.setAttribute('aria-expanded', 'false');
+  const animateMobileMenuExit = () => {
+    return new Promise((resolve) => {
+      if (!mobileMenu || prefersReducedMotion) {
+        resolve();
+        return;
+      }
+
+      stopMobileMenuAnimations();
+
+      const closingAnimations = [];
+
+      if (mobileMenuBackdrop) {
+        closingAnimations.push(
+          mobileMenuBackdrop.animate(
+            [
+              { opacity: 1 },
+              { opacity: 0 }
+            ],
+            {
+              duration: 280,
+              easing: 'cubic-bezier(0.4, 0, 1, 1)',
+              fill: 'both'
+            }
+          )
+        );
+      }
+
+      if (mobileMenuPanel) {
+        closingAnimations.push(
+          mobileMenuPanel.animate(
+            [
+              { opacity: 1, transform: 'translateY(0px) rotate(0deg) scale(1)' },
+              { opacity: 0, transform: 'translateY(42px) rotate(-0.9deg) scale(0.99)' }
+            ],
+            {
+              duration: 340,
+              easing: 'cubic-bezier(0.4, 0, 1, 1)',
+              fill: 'both'
+            }
+          )
+        );
+      }
+
+      [...mobileMenuItems].reverse().forEach((item, index) => {
+        closingAnimations.push(
+          item.animate(
+            [
+              { opacity: 1, transform: 'translateY(0px)' },
+              { opacity: 0, transform: 'translateY(20px)' }
+            ],
+            {
+              duration: 300,
+              delay: index * 36,
+              easing: 'cubic-bezier(0.4, 0, 1, 1)',
+              fill: 'both'
+            }
+          )
+        );
+      });
+
+      if (!closingAnimations.length) {
+        resolve();
+        return;
+      }
+
+      mobileMenuAnimations = closingAnimations;
+
+      Promise.allSettled(
+        closingAnimations.map((animation) => animation.finished.catch(() => undefined))
+      ).then(() => {
+        resolve();
+      });
     });
+  };
+
+  const closeMobileMenu = async () => {
+    if (!mobileMenu) return;
+    if (isMobileMenuClosing) return;
+
+    isMobileMenuClosing = true;
+    try {
+      if (!mobileMenu.classList.contains('hidden')) {
+        await animateMobileMenuExit();
+      }
+
+      mobileMenu.classList.add('hidden');
+      stopMobileMenuAnimations();
+      document.body.classList.remove('overflow-hidden');
+      menuToggleButtons.forEach((toggleButton) => {
+        toggleButton.setAttribute('aria-expanded', 'false');
+      });
+    } finally {
+      isMobileMenuClosing = false;
+    }
   };
 
   menuToggleButtons.forEach((button) => {
@@ -230,7 +379,7 @@ document.addEventListener('DOMContentLoaded', () => {
         document.body.classList.add('overflow-hidden');
         animateMobileMenuEnter();
       } else {
-        closeMobileMenu();
+        void closeMobileMenu();
       }
 
       menuToggleButtons.forEach((toggleButton) => {
@@ -240,7 +389,9 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   menuCloseButtons.forEach((button) => {
-    button.addEventListener('click', closeMobileMenu);
+    button.addEventListener('click', () => {
+      void closeMobileMenu();
+    });
   });
 
   mobileSubmenuToggles.forEach((button) => {
@@ -275,7 +426,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
       if (href === '#') {
         window.scrollTo({ top: 0, behavior: scrollBehavior });
-        if (mobileMenu && link.closest('#mobile-menu')) closeMobileMenu();
+        if (mobileMenu && link.closest('#mobile-menu')) {
+          void closeMobileMenu();
+        }
         return;
       }
 
@@ -287,9 +440,10 @@ document.addEventListener('DOMContentLoaded', () => {
       }
 
       if (mobileMenu && link.closest('#mobile-menu')) {
-        closeMobileMenu();
-        window.requestAnimationFrame(() => {
-          scrollToAnchorTarget(target);
+        closeMobileMenu().then(() => {
+          window.requestAnimationFrame(() => {
+            scrollToAnchorTarget(target);
+          });
         });
         return;
       }
@@ -303,6 +457,10 @@ document.addEventListener('DOMContentLoaded', () => {
     window.requestAnimationFrame(() => {
       scrollToAnchorTarget(initialTarget);
     });
+  }
+
+  if (navbar && !prefersReducedMotion) {
+    window.requestAnimationFrame(animateNavbarEnter);
   }
 
   if (heroSection && !prefersReducedMotion) {
