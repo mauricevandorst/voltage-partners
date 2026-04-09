@@ -42,7 +42,7 @@
   }
 
   .eyebrow {
-    @apply inline-flex rounded-none border border-emerald-200 bg-cyan-50 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.24em] text-emerald-700;
+    @apply inline-flex rounded-none border border-amber-200 bg-amber-50 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.24em] text-amber-700;
   }
 
   .title-xl {
@@ -62,23 +62,23 @@
   }
 
   .wire-card-soft {
-    @apply rounded-none border border-emerald-200 bg-cyan-50/70 p-5;
+    @apply rounded-none border border-amber-200 bg-amber-50/70 p-5;
   }
 
   .wire-dark {
-    @apply rounded-none border border-emerald-700 bg-slate-900 p-6 text-white;
+    @apply rounded-none border border-amber-700 bg-amber-950 p-6 text-white;
   }
 
   .btn {
-    @apply inline-flex items-center justify-center rounded-none px-5 py-3 text-sm font-semibold transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-400 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-60;
+    @apply inline-flex items-center justify-center rounded-none px-5 py-3 text-sm font-semibold transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-400 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-60;
   }
 
   .btn-solid {
-    @apply btn rounded-[10px_0] bg-emerald-500 text-white shadow-sm hover:-translate-y-0.5 hover:bg-emerald-700 hover:shadow-md active:translate-y-0 active:bg-emerald-800;
+    @apply btn rounded-[10px_0] bg-amber-600 text-white shadow-sm hover:-translate-y-0.5 hover:bg-amber-700 hover:shadow-md active:translate-y-0 active:bg-amber-800;
   }
 
   .btn-ghost {
-    @apply btn border border-emerald-200 rounded-[10px_0_10px_0] bg-white text-emerald-700 hover:-translate-y-0.5 hover:border-emerald-500 hover:bg-emerald-50 hover:text-emerald-900 active:translate-y-0;
+    @apply btn border border-amber-200 rounded-[10px_0_10px_0] bg-white text-amber-700 hover:-translate-y-0.5 hover:border-amber-500 hover:bg-amber-50 hover:text-amber-900 active:translate-y-0;
   }
 
   .btn-glass {
@@ -106,19 +106,19 @@
   }
 
   .nav-link {
-    @apply rounded-none px-4 py-2 text-sm font-medium text-slate-700 transition hover:bg-cyan-50 hover:text-emerald-800;
+    @apply rounded-none px-4 py-2 text-sm font-medium text-slate-700 transition hover:bg-amber-50 hover:text-amber-800;
   }
 
   .nav-link-active {
-    @apply rounded-none bg-emerald-600 px-4 py-2 text-sm font-medium text-white;
+    @apply rounded-none bg-amber-700 px-4 py-2 text-sm font-medium text-white;
   }
 
   .field-input {
-    @apply w-full rounded-none border border-emerald-200 bg-white px-4 py-3 text-sm outline-none ring-0 placeholder:text-slate-400 focus:border-emerald-500;
+    @apply w-full rounded-none border border-amber-200 bg-white px-4 py-3 text-sm outline-none ring-0 placeholder:text-slate-400 focus:border-amber-500;
   }
 
   .placeholder-media {
-    @apply rounded-none border border-dashed border-emerald-300 bg-cyan-50;
+    @apply rounded-none border border-dashed border-amber-300 bg-amber-50;
   }
 
   .placeholder-line {

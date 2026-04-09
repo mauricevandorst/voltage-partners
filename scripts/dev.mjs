@@ -52,25 +52,32 @@ function toDocsPath(srcPath) {
 ensureDirs();
 initialSync();
 
-// Tailwind watcher (dev: geen minify)
-const tw = spawn(
-  process.platform === "win32" ? "npm.cmd" : "npm",
-  [
-    "exec",
-    "--",
-    "tailwindcss",
-    "-i",
-    "./src/css/main.css",
-    "-o",
-    "./docs/css/main.css",
-    "--postcss",
-    "--watch",
-  ],
-  {
-    stdio: "inherit",
-    shell: process.platform === "win32", // belangrijk voor Windows + spaties in paden
-  }
-);
+// Tailwind watchers (dev: geen minify)
+function spawnTailwindWatcher(inputFile, outputFile) {
+  return spawn(
+    process.platform === "win32" ? "npm.cmd" : "npm",
+    [
+      "exec",
+      "--",
+      "tailwindcss",
+      "-i",
+      inputFile,
+      "-o",
+      outputFile,
+      "--postcss",
+      "--watch",
+    ],
+    {
+      stdio: "inherit",
+      shell: process.platform === "win32", // belangrijk voor Windows + spaties in paden
+    }
+  );
+}
+
+const tailwindWatchers = [
+  spawnTailwindWatcher("./src/css/main.css", "./docs/css/main.css"),
+  spawnTailwindWatcher("./src/css/main-yellow.css", "./docs/css/main-yellow.css"),
+];
 
 const watcher = chokidar.watch(
   [
@@ -123,9 +130,11 @@ function shutdown(code = 0) {
   try {
     watcher.close();
   } catch { }
-  try {
-    tw.kill("SIGINT");
-  } catch { }
+  for (const tw of tailwindWatchers) {
+    try {
+      tw.kill("SIGINT");
+    } catch { }
+  }
   process.exit(code);
 }
 
